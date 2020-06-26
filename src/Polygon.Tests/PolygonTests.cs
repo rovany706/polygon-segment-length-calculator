@@ -14,10 +14,10 @@ namespace Polygon.Tests
         private static List<List<Line>> testLines;
 
         private static readonly string POLYGON_CSV =
-            Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "TestFiles/table1.csv");
+            Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "table1.csv");
 
         private static readonly string LINES_CSV =
-            Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "TestFiles/table2.csv");
+            Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "table2.csv");
 
         private static object[] IsInPolygonTestCases =
         {
@@ -56,7 +56,7 @@ namespace Polygon.Tests
             testPolygons = new List<List<Point>>
             {
                 CsvReader.ReadPolygonFromFile(POLYGON_CSV),
-                new List<Point> // polygonIndex = 1
+                new List<Point>
                 {
                     new Point(4, 5),
                     new Point(7, 2),
@@ -68,7 +68,6 @@ namespace Polygon.Tests
                 new List<Point> {new Point(1, 1), new Point(1, 7), new Point(7, 7), new Point(7, 1)},
                 new List<Point> {new Point(1, 4), new Point(3, 6), new Point(5, 4), new Point(3, 2)}
             };
-            // polygonIndex = 0
 
             testLines = new List<List<Line>>
             {
