@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection.Metadata;
 
 namespace Polygon.Classes
 {
@@ -44,10 +45,10 @@ namespace Polygon.Classes
         {
             // https://stackoverflow.com/a/565282
             var p = lineA.BeginPoint;
-            var r = lineA.EndPoint;
+            var r = lineA.EndPoint - lineA.BeginPoint;
 
             var q = lineB.BeginPoint;
-            var s = lineB.EndPoint;
+            var s = lineB.EndPoint - lineB.BeginPoint;
 
             var t = (q - p).Cross(s) / r.Cross(s);
             var u = (q - p).Cross(r) / r.Cross(s);

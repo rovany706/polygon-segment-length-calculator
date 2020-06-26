@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using Polygon.Classes.Extensions;
 
 namespace Polygon.Classes
@@ -58,7 +59,8 @@ namespace Polygon.Classes
                             intersections.Add(intersection);
                         }
                     }
-
+                    // граничный случай: при прохождении отрезка через вершину, точка пересечения добавится дважды
+                    intersections = intersections.Distinct().ToList();
                     if (intersections.Count == 2) // пересечений в выпуклом многоугольнике должно быть ровно 2
                     {
                         var segmentInPolygon = new Line(intersections[0], intersections[1]);
