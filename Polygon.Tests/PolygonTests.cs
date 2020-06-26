@@ -1,18 +1,20 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using NUnit.Framework;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
+using NUnit.Framework;
+using Polygon.Classes;
 
-namespace TestApp
+namespace Polygon.Tests
 {
     [TestFixture]
-    class PolygonTest
+    public class PolygonTests
     {
         private static List<List<Point>> testPolygons;
         private static List<Line> lines;
-        private static readonly string POLYGON_CSV = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "table1.csv");
-        private static readonly string LINES_CSV = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "table2.csv");
+        private static readonly string POLYGON_CSV = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "TestFiles/table1.csv");
+        private static readonly string LINES_CSV = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "TestFiles/table2.csv");
 
         private static object[] IsInPolygonTestCases =
         {
@@ -38,11 +40,11 @@ namespace TestApp
             new object[] {new Line(7, 10, 13, 10), new Line(7, 11, 13, 11), false}
         };
 
-        [SetUp]
+        [OneTimeSetUp]
         public void SetUp()
         {
             testPolygons = new List<List<Point>>();
-            testPolygons.Add(Program.ReadPolygonFromFile(POLYGON_CSV)); // polygonIndex = 0
+            testPolygons.Add(CsvReader.ReadPolygonFromFile(POLYGON_CSV)); // polygonIndex = 0
             testPolygons.Add(new List<Point> // polygonIndex = 1
             {
                 new Point(4,5),
@@ -52,14 +54,15 @@ namespace TestApp
                 new Point(13,10),
                 new Point(7,10)
             });
-            lines = Program.ReadLinesFromFile(LINES_CSV);
+            lines = CsvReader.ReadLinesFromFile(LINES_CSV);
         }
 
         [Test]
         [TestCaseSource(nameof(IsInPolygonTestCases))]
         public void IsInPolygon(int polygonIndex, Point point, bool expected)
         {
-            bool result = Program.IsInPolygon(point, testPolygons[polygonIndex]);
+            var polygonChecker = new PolygonChecker(testPolygons[polygonIndex]);
+            bool result = polygonChecker.IsInPolygon(point);
 
             Assert.AreEqual(expected, result);
         }
@@ -68,7 +71,7 @@ namespace TestApp
         [TestCaseSource(nameof(PointOfIntersectionTestCases))]
         public void PointOfIntersectionTest(Line lineA, Line lineB, Point expected)
         {
-            Point result = Program.GetIntersection(lineA, lineB);
+            Point result = Line.GetIntersection(lineA, lineB);
 
             Assert.AreEqual(expected, result);
         }
@@ -77,7 +80,7 @@ namespace TestApp
         [TestCaseSource(nameof(LineIntersectionTestCases))]
         public void LineIntersectionTest(Line lineA, Line lineB, bool expected)
         {
-            bool result = Program.IsIntersecting(lineA, lineB);
+            bool result = Line.IsIntersecting(lineA, lineB);
 
             Assert.AreEqual(expected, result);
         }
@@ -85,7 +88,7 @@ namespace TestApp
         [Test]
         public void ReadPolygonSuccess()
         {
-            var polygon = Program.ReadPolygonFromFile(POLYGON_CSV);
+            var polygon = CsvReader.ReadPolygonFromFile(POLYGON_CSV);
 
             Assert.IsTrue(polygon.Any());
         }
@@ -93,10 +96,9 @@ namespace TestApp
         [Test]
         public void ReadLinesSuccess()
         {
-            var lines = Program.ReadLinesFromFile(LINES_CSV);
+            var lines = CsvReader.ReadLinesFromFile(LINES_CSV);
 
             Assert.IsTrue(lines.Any());
         }
-
     }
 }

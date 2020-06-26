@@ -1,6 +1,8 @@
-﻿namespace TestApp
+﻿using System;
+
+namespace Polygon.Classes
 {
-    class Point
+    public class Point
     {
         public double X { get; set; }
         public double Y { get; set; }
@@ -11,7 +13,9 @@
             this.Y = Y;
         }
 
-        public Point() { }
+        public Point()
+        {
+        }
 
         public static Point operator +(Point left, Point right)
         {
@@ -29,11 +33,11 @@
         }
 
         /// <summary>
-        /// Векторное произведение
+        ///     Векторное произведение
         /// </summary>
         public double Cross(Point otherPoint)
         {
-            return this.X * otherPoint.Y - this.Y * otherPoint.X;
+            return X * otherPoint.Y - Y * otherPoint.X;
         }
 
         public double Cross(Point a, Point b)
@@ -42,23 +46,31 @@
         }
 
         /// <summary>
-        /// Скалярное произведение
+        ///     Скалярное произведение
         /// </summary>
         public double Dot(Point otherPoint)
         {
-            return this.X * otherPoint.X + this.Y * otherPoint.Y;
+            return X * otherPoint.X + Y * otherPoint.Y;
         }
 
-        public double SqrLength
-        {
-            get => this.Dot(this);
-        }
+        public double SqrLength => Dot(this);
 
         public override bool Equals(object obj)
         {
-            Point otherPoint = (Point)obj;
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != GetType()) return false;
+            return Equals((Point) obj);
+        }
 
-            return this.X == otherPoint.X && this.Y == otherPoint.Y;
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(X, Y);
+        }
+
+        protected bool Equals(Point other)
+        {
+            return X.Equals(other.X) && Y.Equals(other.Y);
         }
     }
 }
