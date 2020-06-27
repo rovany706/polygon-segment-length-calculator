@@ -29,3 +29,7 @@
  1. Откройте папку ["Polygon.Console"](src/Polygon.Console) в терминале и выполните команду:
  `dotnet run -c Release` 
 
+### Тестирование
+
+ 1. Откройте папку ["src"](src/) в терминале и выполните команду:
+ `dotnet test` 
